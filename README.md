@@ -28,7 +28,7 @@ context-grounded responses.
 The system follows a modular RAG architecture with clear separation of responsibilities.
 
 **Architecture Flow:**
-
+**PHASE 1: Document Upload & Ingestion**
 ```
 Admin or User
      │
@@ -50,6 +50,7 @@ FAISS Vector Database
 (Stored for retrieval)
 
 ```
+**PHASE 2: User Query & Answering**
 <img width="760" height="372" alt="image" src="https://github.com/user-attachments/assets/f4be02bc-d490-4856-ab4c-bbbadff93062" />
 
 
