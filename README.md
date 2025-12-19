@@ -72,8 +72,8 @@ Final Answer
 * **Frontend:** Streamlit
 * **Backend Logic:** Python modules
 * **Vector Store:** FAISS
-* **Embeddings:** HuggingFace
-* **LLM:** OpenAI GPT / Azure OpenAI
+* **Embeddings:** HuggingFace (sentence transformer)
+* **LLM:** HuggingFace (flan-t5-base)
 * **Version Control:** GitHub
 
 ### Execution Flow
