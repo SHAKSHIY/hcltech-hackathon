@@ -30,19 +30,25 @@ The system follows a modular RAG architecture with clear separation of responsib
 **Architecture Flow:**
 
 ```
-User (Streamlit UI)
-        ↓
-Query Processing Layer
-        ↓
-Embedding Model
-        ↓
-Vector Database (FAISS)
-        ↓
-Relevant Context (Top-K Chunks)
-        ↓
-LLM (GPT / Azure OpenAI)
-        ↓
-Final Answer
+Admin or User
+     │
+     ▼
+Upload PDF Documents
+     │
+     ▼
+Text Extraction
+     │
+     ▼
+Chunking (500–800 tokens)
+     │
+     ▼
+Embedding Generation
+(HuggingFace Sentence Transformer)
+     │
+     ▼
+FAISS Vector Database
+(Stored for retrieval)
+
 ```
 <img width="760" height="372" alt="image" src="https://github.com/user-attachments/assets/f4be02bc-d490-4856-ab4c-bbbadff93062" />
 
