@@ -98,22 +98,6 @@ Final Answer
 
 ---
 
-## 6. Challenges & Mitigation
-
-* **Hallucination Risk:** Mitigated using retrieval-grounded prompts.
-* **Latency Constraints:** Controlled using top-K retrieval and efficient FAISS search.
-* **Time Limitations:** Focused on MVP features over unnecessary complexity.
-
----
-
-## 7. Future Enhancements
-
-* Document upload support via UI
-* Hybrid search (keyword + vector)
-* Query history and caching
-* Role-based access control
-
----
 
 ## 8. Conclusion
 
