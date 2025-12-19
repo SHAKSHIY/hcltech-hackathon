@@ -51,7 +51,7 @@ Final Answer
 
 ## 3. Design Approach
 
-### 3.1 Corpus Preparation
+### 3.1 Preparation
 
 * Selected **3–5 documents** (PDFs / articles) as the knowledge base.
 * Extracted raw text from documents.
