@@ -9,6 +9,20 @@ The solution demonstrates practical understanding of **GenAI concepts, system de
 
 ---
 
+## Selected Domain & Client
+
+**Domain:** Public Health & Nutrition  
+**Client:** Public Health Authority / Wellness Program (India)
+
+The system is designed to assist users by answering questions related to
+official dietary and nutrition guidelines issued for the Indian population.
+
+The knowledge base is restricted to authoritative documents such as
+ICMR–NIN Dietary Guidelines for Indians (2024), ensuring reliable,
+context-grounded responses.
+
+---
+
 ## 2. High-Level System Design
 
 The system follows a modular RAG architecture with clear separation of responsibilities.
