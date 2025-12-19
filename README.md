@@ -30,6 +30,8 @@ LLM (GPT / Azure OpenAI)
         ↓
 Final Answer
 ```
+<img width="760" height="372" alt="image" src="https://github.com/user-attachments/assets/f4be02bc-d490-4856-ab4c-bbbadff93062" />
+
 
 ---
 
