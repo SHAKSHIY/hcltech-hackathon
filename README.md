@@ -70,7 +70,7 @@ Final Answer
 * **Frontend:** Streamlit
 * **Backend Logic:** Python modules
 * **Vector Store:** FAISS
-* **Embeddings:** OpenAI / HuggingFace
+* **Embeddings:** HuggingFace
 * **LLM:** OpenAI GPT / Azure OpenAI
 * **Version Control:** GitHub
 
