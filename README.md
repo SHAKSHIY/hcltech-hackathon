@@ -11,8 +11,8 @@ The solution demonstrates practical understanding of **GenAI concepts, system de
 
 ## Selected Domain & Client
 
-**Domain:** Dietry Guidelines
-**Client:** Public Health Authority / Wellness Program (India)
+- **Domain:** Dietry Guidelines
+- **Client:** Public Health Authority / Wellness Program (India)
 
 The system is designed to assist users by answering questions related to
 official dietary and nutrition guidelines issued for the Indian population.
