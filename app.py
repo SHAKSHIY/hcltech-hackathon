@@ -98,7 +98,7 @@ def document_ingestion_tab():
                 
                 if success:
                     st.success(" Ingestion completed successfully!")
-                    st.balloons()
+                    # st.balloons()
                     
                     # Reload RAG engine
                     load_rag_engine()

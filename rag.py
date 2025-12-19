@@ -127,146 +127,110 @@ class RAGQueryEngine:
         return results
     
     def construct_prompt(self, query: str, retrieved_chunks: List[Dict]) -> str:
-        """
-        Build instruction-style prompt for FLAN-T5
-        
-        Args:
-            query: User query
-            retrieved_chunks: Retrieved context chunks
-            
-        Returns:
-            Formatted prompt string
-        """
-        # Concatenate retrieved chunks
         context_parts = []
-        for i, chunk in enumerate(retrieved_chunks):
+        for chunk in retrieved_chunks:
             context_parts.append(
-                f"[Source: {chunk['source']}]\n{chunk['text']}"
+            f"{chunk['text']}"
             )
-        
+
         context = "\n\n".join(context_parts)
-        
-        # Truncate context if too long
-        context_tokens = self.tokenizer.encode(context, add_special_tokens=False)
-        if len(context_tokens) > self.max_context_length:
-            context_tokens = context_tokens[:self.max_context_length]
-            context = self.tokenizer.decode(context_tokens)
-        
-        # Build instruction prompt
-        prompt = f"""You are a knowledgeable assistant for Indian dietary guidelines and public health nutrition.
 
-Context (from official dietary guidelines):
-{context}
+        prompt = (
+            "You are a public health nutrition assistant.\n\n"
+            "Based ONLY on the following context from Indian dietary guidelines, "
+            "answer the question in 3 to 5 clear bullet points.\n\n"
+            "Context:\n"
+            f"{context}\n\n"
+            "Question:\n"
+            f"{query}\n\n"
+            "Bullet point answer:\n"
+        )
 
-Question: {query}
-
-Instructions:
-- Answer ONLY based on the context provided above
-- If the context does not contain relevant information, say "I cannot find information about this in the provided guidelines."
-- Be concise and factual
-- Do not add information not present in the context
-
-Answer:"""
-        
         return prompt
-    
+
     def generate_answer(self, prompt: str) -> str:
-        """
-        Generate answer using FLAN-T5
-        
-        Args:
-            prompt: Formatted prompt with context and query
-            
-        Returns:
-            Generated answer string
-        """
-        # Tokenize input
         inputs = self.tokenizer(
             prompt,
             return_tensors="pt",
-            max_length=2048,
-            truncation=True
+            truncation=True,
+            max_length=2048
         ).to(self.device)
-        
-        # Generate answer
+
         with torch.no_grad():
             outputs = self.llm.generate(
                 **inputs,
-                max_length=256,
-                num_beams=4,
-                early_stopping=True,
-                no_repeat_ngram_size=3
+                max_new_tokens=200,
+                do_sample=True,
+                temperature=0.7,
+                top_p=0.9,
+                repetition_penalty=1.1
             )
-        
-        # Decode answer
+
         answer = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+        # Remove prompt echo if any
+        if "Bullet point answer:" in answer:
+            answer = answer.split("Bullet point answer:")[-1]
+
         return answer.strip()
-    
+
     def query(self, user_query: str) -> Dict:
-        """
-        Complete RAG pipeline: Retrieve → Generate
-        
-        Args:
-            user_query: User's question
-            
-        Returns:
-            Dictionary with answer, sources, and metadata
-        """
-        # Validation
         if not user_query.strip():
             return {
                 "answer": "Please provide a valid query.",
                 "sources": [],
                 "error": "Empty query"
             }
-        
+
         if not self.is_index_ready():
             return {
                 "answer": "No documents have been indexed yet. Please upload and ingest PDFs first.",
                 "sources": [],
                 "error": "Index not ready"
             }
-        
+
         try:
-            # Step 1: Retrieve relevant chunks
-            print(f"\n Retrieving context for: '{user_query}'")
+            # STEP 1: Retrieve
+            print(f"\n[DEBUG] Retrieving context for: {user_query}")
             retrieved = self.retrieve(user_query)
-            
+
             if not retrieved:
                 return {
                     "answer": "No relevant information found in the indexed documents.",
                     "sources": [],
                     "error": "No results"
                 }
-            
-            print(f" Retrieved {len(retrieved)} chunks")
-            
-            # Step 2: Construct prompt
+
+            # ✅ DEBUG PRINT (SAFE LOCATION)
+            print("\n[DEBUG] Retrieved Chunks:")
+            for r in retrieved:
+                print("----")
+                print(r["text"][:300])
+
+            # STEP 2: Prompt
             prompt = self.construct_prompt(user_query, retrieved)
-            
-            # Step 3: Generate answer
-            print(" Generating answer...")
+
+            # STEP 3: Generate
+            print("\n[DEBUG] Generating answer...")
             answer = self.generate_answer(prompt)
-            
-            # Extract unique sources
-            sources = list(set([chunk["source"] for chunk in retrieved]))
-            
-            print(" Answer generated")
-            
+
+            sources = list(set(chunk["source"] for chunk in retrieved))
+
             return {
                 "answer": answer,
                 "sources": sources,
                 "retrieved_chunks": retrieved,
                 "error": None
             }
-            
+
         except Exception as e:
-            print(f" Query failed: {str(e)}")
+            print(f"[ERROR] Query failed: {e}")
             return {
                 "answer": f"An error occurred: {str(e)}",
                 "sources": [],
                 "error": str(e)
             }
+
 
 
 def main():
